@@ -1,0 +1,56 @@
+# Maven target directory
+/target/
+
+# Build output
+*.class
+*.log
+*.tmp
+*.out
+
+# Eclipse project files
+.classpath
+.project
+.settings/
+
+# IntelliJ IDEA project files
+.idea/
+*.iml
+*.iws
+out/
+
+# VS Code
+.vscode/
+
+# Mac and Windows OS files
+.DS_Store
+Thumbs.db
+
+# Logs and temp files
+*.log
+*.pid
+*.seed
+*.pid.lock
+
+# Reports
+*.html
+*.json
+*.xml
+cucumber-report/
+extent-report/
+test-output/
+target/cucumber-html-report.html
+target/cucumber-report.json
+
+# Environment files
+.env
+*.properties.local
+
+# Temporary downloads or drivers
+chromedriver.exe
+geckodriver.exe
+drivers/
+*.zip
+
+# Java crash logs
+hs_err_pid*
+replay_pid*
