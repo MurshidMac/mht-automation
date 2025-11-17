@@ -34,6 +34,23 @@ public class LoginSteps {
     @Then("the login page should display successfully")
     public void the_login_page_should_display_successfully() {
         System.out.println("Login page displayed successfully.");
-        driver.quit();
+
     }
+
+    @Then("Wait till mobile numberPage loads")
+    public void wait_till_mobile_numberPage_loads(){
+        loginPage.waitUntilMobileLoginPageLoads();
+        //driver.quit();
+    }
+
+    @And("Input the mobile number {string}")
+    public void inputMobileNumberAndExpiry(String pkid) {
+        loginPage.mobileNumberInput(pkid);
+    }
+
+    @Then("Click on the Login in Mobile PKI Option")
+    public void clickOnLoginInMobilePKI(){
+        loginPage.loginClickMobilePKI();
+    }
+
 }
