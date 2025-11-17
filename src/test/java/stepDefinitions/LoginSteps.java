@@ -1,5 +1,6 @@
 package stepDefinitions;
 
+import hooks.TestHooks;
 import io.cucumber.java.en.*;
 import org.example.pages.LoginPage;
 import org.openqa.selenium.WebDriver;
@@ -13,11 +14,13 @@ public class LoginSteps {
 
     @Given("the user opens the MOT website")
     public void the_user_opens_the_mot_website() {
-        System.setProperty("webdriver.chrome.driver", "C:\\drivers\\chromedriver-win64\\chromedriver.exe");
-        ChromeOptions options = new ChromeOptions();
-        driver = new ChromeDriver(options);
-        driver.manage().window().maximize();
-        loginPage = new LoginPage(driver);
+
+        //System.setProperty("webdriver.chrome.driver", "C:\\drivers\\chromedriver-win64\\chromedriver.exe");
+        //ChromeOptions options = new ChromeOptions();
+        //driver = new ChromeDriver(options);
+        //driver.manage().window().maximize();
+        //loginPage = new LoginPage(driver);
+        loginPage = new LoginPage(TestHooks.driver);
         loginPage.openWebsite();
     }
 

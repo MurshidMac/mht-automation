@@ -1,5 +1,6 @@
 package org.example.pages;
 
+import org.example.core.UserActions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -9,26 +10,30 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
+/**
+ * Page object for the login interactions used in examples.
+ */
 public class LoginPage {
-    WebDriver driver;
+    private final WebDriver driver;
+    private final UserActions actions;
 
-    private By loginButton = By.xpath("/html/body/div[1]/div/div[3]/div[1]/div/div/a");
-    private By loginByPKId = By.xpath("/html/body/div[2]/div/div/div/div/div/div[2]/div[3]/div/div[1]/div/div/div[2]/a");
+    //private By loginButton =  By.xpath("//a[@class='nav-link' and text()='Login']");
+    private By loginButton =  By.xpath("//html/body/div[1]/div/div[3]/div[1]/div/div/a");
     private By mobilePKILogin = By.xpath("//a[@title='Login with the Mobile ID']");
     private By mobileNumber = By.name("mobileNumber");
     private By mobileLoginButton = By.cssSelector("button[name='button'][value='login']");
 
     public LoginPage(WebDriver driver) {
         this.driver = driver;
+        this.actions = new UserActions(driver);
     }
 
     public void openWebsite() {
         driver.get("https://mot.almadinagroup.net/");
-        System.out.println("Page Title: " + driver.getTitle());
     }
 
     public void clickLoginButton() {
-        driver.findElement(loginButton).click();
+        actions.click(loginButton);
     }
 
     public void clickLoginByPKI() {
@@ -57,11 +62,10 @@ public class LoginPage {
         WebElement idField = driver.findElement(mobileNumber);
         idField.clear();
         idField.sendKeys(pkid);
-
     }
 
     public void loginClickMobilePKI(){
-        driver.findElement(mobileLoginButton).click();
+        actions.click(mobileLoginButton);
     }
 
 }
