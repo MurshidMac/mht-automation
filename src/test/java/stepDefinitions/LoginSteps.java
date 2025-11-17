@@ -9,17 +9,10 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 public class LoginSteps {
 
-    WebDriver driver;
     LoginPage loginPage;
 
     @Given("the user opens the MOT website")
     public void the_user_opens_the_mot_website() {
-
-        //System.setProperty("webdriver.chrome.driver", "C:\\drivers\\chromedriver-win64\\chromedriver.exe");
-        //ChromeOptions options = new ChromeOptions();
-        //driver = new ChromeDriver(options);
-        //driver.manage().window().maximize();
-        //loginPage = new LoginPage(driver);
         loginPage = new LoginPage(TestHooks.driver);
         loginPage.openWebsite();
     }
@@ -37,13 +30,11 @@ public class LoginSteps {
     @Then("the login page should display successfully")
     public void the_login_page_should_display_successfully() {
         System.out.println("Login page displayed successfully.");
-
     }
 
     @Then("Wait till mobile numberPage loads")
     public void wait_till_mobile_numberPage_loads(){
         loginPage.waitUntilMobileLoginPageLoads();
-        //driver.quit();
     }
 
     @And("Input the mobile number {string}")
