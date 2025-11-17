@@ -1,5 +1,5 @@
 Feature: Login to MOT Website
-
+  @smoke @regression @login @MobilePKI
   Scenario Outline: User logs in via PKI
     Given the user opens the MOT website
     When the user clicks the login button
