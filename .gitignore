@@ -34,7 +34,6 @@ Thumbs.db
 # Reports
 *.html
 *.json
-*.xml
 cucumber-report/
 extent-report/
 test-output/
