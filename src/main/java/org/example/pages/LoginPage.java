@@ -13,9 +13,7 @@ import java.time.Duration;
 /**
  * Page object for the login interactions used in examples.
  */
-public class LoginPage {
-    private final WebDriver driver;
-    private final UserActions actions;
+public class LoginPage extends BasePage{
 
     //private By loginButton =  By.xpath("//a[@class='nav-link' and text()='Login']");
     private By loginButton =  By.xpath("//html/body/div[1]/div/div[3]/div[1]/div/div/a");
@@ -24,8 +22,7 @@ public class LoginPage {
     private By mobileLoginButton = By.cssSelector("button[name='button'][value='login']");
 
     public LoginPage(WebDriver driver) {
-        this.driver = driver;
-        this.actions = new UserActions(driver);
+        super(driver);
     }
 
     public void openWebsite() {
