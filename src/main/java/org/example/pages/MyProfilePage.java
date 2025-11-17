@@ -1,6 +1,5 @@
 package org.example.pages;
 
-import org.example.core.UserActions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
