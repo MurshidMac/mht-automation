@@ -7,6 +7,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
+
 /**
  * Small utility wrapper for common Selenium actions with waits.
  */
@@ -47,4 +49,12 @@ public class UserActions {
     public void waitForPageTitle(String title) {
         wait.until(ExpectedConditions.titleContains(title));
     }
+
+    public WebElement waitForElement(By locator) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        return wait.until(ExpectedConditions.refreshed(
+                ExpectedConditions.visibilityOfElementLocated(locator)
+        ));
+    }
+
 }
