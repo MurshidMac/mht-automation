@@ -8,14 +8,14 @@ import org.example.pages.MyProfilePage;
 public class MyProfileSteps {
     MyProfilePage myProfilePage;
 
-    @Then("Verify you're logged in successfully")
+    @Then("Verify you're logged by Clicking on My Profile option in Admin")
     public void verifyLoggedUser(){
         myProfilePage = new MyProfilePage(TestHooks.driver);
         myProfilePage.clickOnLoggedInUser();
     }
 
-    @And("Click on My Profile option in Admin")
+    @And("Click on My Profile Update")
     public void myProfileVisibility(){
-        myProfilePage.clickOnMyProfile();
+        myProfilePage.clickOnMyProfileUpdate();
     }
 }
