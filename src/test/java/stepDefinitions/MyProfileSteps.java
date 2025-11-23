@@ -18,4 +18,15 @@ public class MyProfileSteps {
     public void myProfileVisibility(){
         myProfilePage.clickOnMyProfileUpdate();
     }
+
+    @And("My Profile Update Form should appear")
+    public void myProfileUpdateForm(){
+        myProfilePage.myProfileUpdateFormShouldDisplay();
+    }
+
+    @Then("Input the Id expiry {string} to update the form")
+    public void inputTheIDExpiryDate(String idExpiry){
+        myProfilePage.inputIDExpiryDate(idExpiry);
+    }
+
 }

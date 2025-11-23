@@ -10,6 +10,8 @@ Feature: My Profile page
     Then Click on the Login in Mobile PKI Option
     Then Verify you're logged by Clicking on My Profile option in Admin
     And Click on My Profile Update
+    And My Profile Update Form should appear
+    Then Input the Id expiry "<ExpiryDate>" to update the form
     Examples:
-      | PKID    |
-      | 1952951 |
+      | PKID    | ExpiryDate |
+      | 1952951 |  2027-08-31 00:00:00.0000000 |
