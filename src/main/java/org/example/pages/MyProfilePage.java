@@ -29,10 +29,6 @@ public class MyProfilePage extends BasePage {
                 WebElement dropdownTrigger = wait.until(ExpectedConditions
                         .elementToBeClickable(userDropdown));
                 dropdownTrigger.click();
-
-                wait.until(ExpectedConditions.visibilityOfElementLocated(
-                        By.cssSelector(".dropdown-menu.show")
-                ));
                 Thread.sleep(500);
                 WebElement element = driver.findElements(myProfileBtn).get(0);
                 ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
