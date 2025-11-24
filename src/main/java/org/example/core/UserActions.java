@@ -57,4 +57,21 @@ public class UserActions {
         ));
     }
 
+    public WebElement findElementInIframes(By locator) {
+        driver.switchTo().defaultContent(); // reset first
+
+        int iframeCount = driver.findElements(By.tagName("iframe")).size();
+
+        for (int i = 0; i < iframeCount; i++) {
+            driver.switchTo().defaultContent();
+            driver.switchTo().frame(i);
+
+            if (!driver.findElements(locator).isEmpty()) {
+                return driver.findElement(locator);
+            }
+        }
+        driver.switchTo().defaultContent();
+        return null; // not found in any iframe
+    }
+
 }

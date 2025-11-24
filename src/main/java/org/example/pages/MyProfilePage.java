@@ -1,24 +1,19 @@
 package org.example.pages;
 
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class MyProfilePage extends BasePage {
 
     private By userDropdown = By.id("userDropdown");
-    //private By userProfile = By.xpath("/html/body/div[1]/div/div[3]/div[1]/div/div/div[2]/div[2]/a[1]/span[2]");
-    private By userProfile = By.xpath("//span[@class='user-full-name']");
     private By myProfileUpdateBtn = By.xpath("//button[normalize-space()='Update']");
     private By expiryDate =  By.xpath("//input[contains(@class,'form-control') and @type='text']");
-
-    By myProfileBtn = By.id("MenuItem_MyProfile");
+    private By myProfileBtn = By.id("MenuItem_MyProfile");
 
 
     public WebElement inputFieldElement;
@@ -28,15 +23,21 @@ public class MyProfilePage extends BasePage {
     }
 
     public void clickOnLoggedInUser(){
-        if(actions.isDisplayed(userDropdown)){
+        if(actions.isDisplayed(userDropdown)) {
             try {
                 WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-                wait.until(ExpectedConditions.elementToBeClickable(userDropdown)).click();
-                Thread.sleep(200);
-                wait.until(ExpectedConditions.visibilityOfElementLocated(myProfileBtn));
-                wait.until(ExpectedConditions.elementToBeClickable(myProfileBtn)).click();
-            }catch(InterruptedException e){
-                System.err.println("Thread is kept to sleep");
+                WebElement dropdownTrigger = wait.until(ExpectedConditions
+                        .elementToBeClickable(userDropdown));
+                dropdownTrigger.click();
+
+                wait.until(ExpectedConditions.visibilityOfElementLocated(
+                        By.cssSelector(".dropdown-menu.show")
+                ));
+                Thread.sleep(500);
+                WebElement element = driver.findElements(myProfileBtn).get(0);
+                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+            } catch (InterruptedException e) {
+                System.err.println("Error with thread");
             }
         }
     }
