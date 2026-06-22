@@ -19,7 +19,16 @@ public class DriverFactory {
             // Selenium Manager (built into Selenium 4.6+) automatically downloads
             // the correct chromedriver if it is not present on PATH — no manual setup needed.
             ChromeOptions options = new ChromeOptions();
-            // add options as needed, e.g. headless, disable-gpu, etc.
+
+            // Run headless in CI (CHROME_HEADLESS env var is set in the GitHub Actions workflow)
+            if ("true".equalsIgnoreCase(System.getenv("CHROME_HEADLESS"))) {
+                options.addArguments("--headless=new");
+                options.addArguments("--no-sandbox");
+                options.addArguments("--disable-dev-shm-usage");
+                options.addArguments("--disable-gpu");
+                options.addArguments("--window-size=1920,1080");
+            }
+
             driver = new ChromeDriver(options);
             driver.manage().window().maximize();
         }
