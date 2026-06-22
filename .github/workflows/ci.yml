@@ -41,7 +41,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: extent-report-${{ github.run_number }}
-          path: target/extent-reports/ExtentReport.html
+          path: target/extent-reports/
           retention-days: 30
 
       - name: Upload Cucumber HTML Report

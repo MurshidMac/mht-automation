@@ -20,6 +20,10 @@ public class LoginPage extends BasePage{
     private By mobilePKILogin = By.xpath("//a[@title='Login with the Mobile ID']");
     private By mobileNumber = By.name("mobileNumber");
     private By mobileLoginButton = By.cssSelector("button[name='button'][value='login']");
+    private By formAuthentication = By.xpath("//div[contains(@class,'btn-title') and normalize-space()='Form Authentication']");
+    private By formUsername = By.id("Input_Username");
+    private By formPassword = By.id("Input_Password");
+
 
     public LoginPage(WebDriver driver) {
         super(driver);
@@ -37,8 +41,8 @@ public class LoginPage extends BasePage{
         try {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(6));
             // wait for next page element
-            wait.until(ExpectedConditions.visibilityOfElementLocated(mobilePKILogin));
-            driver.findElement(mobilePKILogin).click();
+            wait.until(ExpectedConditions.visibilityOfElementLocated(formAuthentication));
+            driver.findElement(formAuthentication).click();
         } catch (NoSuchElementException e) {
             System.err.println("PKI Element not found. Trying alternative...");
         }
@@ -63,6 +67,22 @@ public class LoginPage extends BasePage{
 
     public void loginClickMobilePKI(){
         actions.click(mobileLoginButton);
+    }
+
+    public void clickFormAuthentication(){
+        actions.click(formAuthentication);
+    }
+
+    public void fillFormUsername(String username){
+        WebElement usernameField = driver.findElement(formUsername);
+        usernameField.clear();
+        usernameField.sendKeys(username);
+    }
+
+    public void fillFormPassword(String password){
+        WebElement usernameField = driver.findElement(formPassword);
+        usernameField.clear();
+        usernameField.sendKeys(password);
     }
 
 }

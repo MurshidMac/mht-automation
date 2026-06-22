@@ -19,7 +19,7 @@ public class LoginSteps {
         loginPage.clickLoginButton();
     }
 
-    @When("the user chooses to log in with PKI")
+    @And("the user chooses to log in with PKI")
     public void the_user_chooses_to_log_in_with_pki() {
         loginPage.clickLoginByPKI();
     }
@@ -42,6 +42,21 @@ public class LoginSteps {
     @Then("Click on the Login in Mobile PKI Option")
     public void clickOnLoginInMobilePKI(){
         loginPage.loginClickMobilePKI();
+    }
+
+    @When("the user chooses to log in with Form Authentication")
+    public void   the_user_chooses_to_log_in_with_Form_Authentication() {
+        loginPage.clickFormAuthentication();
+    }
+
+    @And("Input the form username {string}")
+    public void inputFormUsername(String username) {
+        loginPage.fillFormUsername(username);
+    }
+    //
+    @And("Input the form password {string}")
+    public void inputFormPassword(String password) {
+        loginPage.fillFormPassword(password);
     }
 
 }
