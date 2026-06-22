@@ -1,7 +1,7 @@
 Feature: Login to MOT Website
   @smoke @regression @login @MobilePKI
   Scenario Outline: User logs in via PKI
-    Given the user opens the MOT website
+    Given the user opens the MHT Eportal website
     When the user clicks the login button
     And the user chooses to log in with PKI
     Then the login page should display successfully

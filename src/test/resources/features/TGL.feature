@@ -1,7 +1,7 @@
 Feature: Tourist Guide License
 
   Scenario Outline: Verify the User is able to create a tourist guide license
-    Given the user opens the MOT website
+    Given the user opens the MHT Eportal website
     When the user clicks the login button
     And the user chooses to log in with PKI
     Then the login page should display successfully

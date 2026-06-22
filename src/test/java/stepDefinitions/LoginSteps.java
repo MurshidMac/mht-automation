@@ -8,7 +8,7 @@ public class LoginSteps {
 
     LoginPage loginPage;
 
-    @Given("the user opens the MOT website")
+    @Given("the user opens the MHT Eportal website")
     public void the_user_opens_the_mot_website() {
         loginPage = new LoginPage(TestHooks.driver);
         loginPage.openWebsite();

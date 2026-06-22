@@ -1,7 +1,7 @@
 Feature: My Profile page
 
   Scenario Outline: Update My Profile Information as an Omani Candidate
-    Given the user opens the MOT website
+    Given the user opens the MHT Eportal website
     When the user clicks the login button
     And the user chooses to log in with PKI
     Then the login page should display successfully
