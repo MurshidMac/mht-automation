@@ -59,12 +59,11 @@
             <!-- Cluecumber: rich Cucumber dashboard with charts, tag stats, feature breakdown -->
             <plugin>
                 <groupId>com.trivago.rta</groupId>
-                <artifactId>cluecumber-maven</artifactId>
+                <artifactId>cluecumber-report-plugin</artifactId>
                 <version>2.9.4</version>
                 <executions>
                     <execution>
                         <id>generate-cluecumber-report</id>
-                        <!-- runs automatically after tests via 'mvn verify' or 'mvn test' + post-integration -->
                         <phase>post-integration-test</phase>
                         <goals>
                             <goal>reporting</goal>
@@ -72,14 +71,10 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <!-- reads the JSON produced by the Cucumber JSON plugin -->
                     <sourceJsonReportDirectory>${project.build.directory}/cucumber-reports</sourceJsonReportDirectory>
-                    <!-- outputs the dashboard here -->
                     <generatedHtmlReportDirectory>${project.build.directory}/cluecumber-report</generatedHtmlReportDirectory>
-                    <!-- dashboard customisation -->
                     <customPageTitle>MHT Automation — Cucumber Dashboard</customPageTitle>
                     <startPage>ALL_SCENARIOS</startPage>
-                    <!-- expand failed scenarios by default so failures are front and centre -->
                     <expandBeforeAfterHooks>true</expandBeforeAfterHooks>
                     <expandStepHooks>true</expandStepHooks>
                     <expandDocStrings>true</expandDocStrings>
