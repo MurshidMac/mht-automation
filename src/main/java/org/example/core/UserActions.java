@@ -24,7 +24,9 @@ public class UserActions {
 
     // sometime wait until fail - keep it as second option
     public void click(By locator) {
-        driver.findElement(locator).click();
+        WebElement el = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+        el.click();
+        //driver.findElement(locator).click();
         //wait.until(ExpectedConditions.elementToBeClickable(locator)).click();
     }
 
