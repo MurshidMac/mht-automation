@@ -14,6 +14,19 @@ public class MyProfileSteps {
         myProfilePage.clickOnLoggedInUser();
     }
 
+    // Used by TGL.feature — verifies login succeeded by checking the user dropdown is visible
+    @Then("Verify you're logged in successfully")
+    public void verifyLoggedInSuccessfully(){
+        myProfilePage = new MyProfilePage(TestHooks.driver);
+        myProfilePage.verifyUserIsLoggedIn();
+    }
+
+    // Used by TGL.feature — clicks My Profile from the user dropdown
+    @Then("Click on My Profile option in Admin")
+    public void clickMyProfileOptionInAdmin(){
+        myProfilePage.clickOnLoggedInUser();
+    }
+
     @And("Click on My Profile Update")
     public void myProfileVisibility(){
         myProfilePage.clickOnMyProfileUpdate();

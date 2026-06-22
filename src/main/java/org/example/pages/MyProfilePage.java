@@ -22,6 +22,12 @@ public class MyProfilePage extends BasePage {
         super(driver);
     }
 
+    public void verifyUserIsLoggedIn() {
+        if (!actions.isDisplayed(userDropdown)) {
+            throw new RuntimeException("Login verification failed: user dropdown is not visible. User may not be logged in.");
+        }
+    }
+
     public void clickOnLoggedInUser(){
         if(actions.isDisplayed(userDropdown)) {
             try {
@@ -89,8 +95,19 @@ public class MyProfilePage extends BasePage {
         }
 
         try {
-            inputFieldElement.clear();
-            inputFieldElement.sendKeys(formattedDate);
+            // Use JavaScript to set the value — handles read-only and date-picker inputs
+            // that reject direct clear()/sendKeys() interactions
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].removeAttribute('readonly');" +
+                    "arguments[0].value = arguments[1];",
+                    inputFieldElement, formattedDate
+            );
+            // Fire change/input events so the app's JS picks up the new value
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].dispatchEvent(new Event('input', { bubbles: true }));" +
+                    "arguments[0].dispatchEvent(new Event('change', { bubbles: true }));",
+                    inputFieldElement
+            );
         } catch (Exception e) {
             throw new RuntimeException("Failed to send expiry date to input field.", e);
         }
