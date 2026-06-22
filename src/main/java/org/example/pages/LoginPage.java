@@ -1,5 +1,6 @@
 package org.example.pages;
 
+import org.example.utils.ConfigReader;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -19,13 +20,18 @@ public class LoginPage extends BasePage{
     private By mobilePKILogin = By.xpath("//a[@title='Login with the Mobile ID']");
     private By mobileNumber = By.name("mobileNumber");
     private By mobileLoginButton = By.cssSelector("button[name='button'][value='login']");
+    private By formAuthentication = By.xpath("//div[contains(@class,'btn-title') and normalize-space()='Form Authentication']");
+    private By formUsername = By.id("Input_Username");
+    private By formPassword = By.id("Input_Password");
+    private By formSignInButton = By.cssSelector("button.btn-submit[type='submit']");
+
 
     public LoginPage(WebDriver driver) {
         super(driver);
     }
 
     public void openWebsite() {
-        driver.get("https://mot.almadinagroup.net/");
+        driver.get(ConfigReader.get("base.url"));
     }
 
     public void clickLoginButton() {
@@ -36,32 +42,54 @@ public class LoginPage extends BasePage{
         try {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(6));
             // wait for next page element
-            wait.until(ExpectedConditions.visibilityOfElementLocated(mobilePKILogin));
-            driver.findElement(mobilePKILogin).click();
+            wait.until(ExpectedConditions.visibilityOfElementLocated(formAuthentication));
+            driver.findElement(formAuthentication).click();
         } catch (NoSuchElementException e) {
             System.err.println("PKI Element not found. Trying alternative...");
         }
     }
 
-    public void waitUntilMobileLoginPageLoads(){
-        try{
-            // wait for next page element (Mobile Number input)
-            WebDriverWait wait2 = new WebDriverWait(driver, Duration.ofSeconds(10));
-            wait2.until(ExpectedConditions.visibilityOfElementLocated(mobileNumber));
-        }catch (NoSuchElementException e){
+    public void waitUntilMobileLoginPageLoads() {
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(mobileNumber));
+        } catch (NoSuchElementException e) {
             System.err.println(e.getMessage());
         }
     }
 
-    public void mobileNumberInput(String pkid){
-        // Locate the ID/mobileNumber input field
+    public void mobileNumberInput(String pkid) {
         WebElement idField = driver.findElement(mobileNumber);
         idField.clear();
         idField.sendKeys(pkid);
     }
 
-    public void loginClickMobilePKI(){
+    public void loginClickMobilePKI() {
         actions.click(mobileLoginButton);
+    }
+
+    public void clickFormAuthentication() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(6));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(formAuthentication));
+        actions.click(formAuthentication);
+    }
+
+    public void fillFormUsername(String username) {
+        WebElement usernameField = driver.findElement(formUsername);
+        usernameField.clear();
+        usernameField.sendKeys(username);
+    }
+
+    public void fillFormPassword(String password) {
+        WebElement passwordField = driver.findElement(formPassword);
+        passwordField.clear();
+        passwordField.sendKeys(password);
+    }
+
+    public void clickSignIn() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(6));
+        wait.until(ExpectedConditions.elementToBeClickable(formSignInButton));
+        actions.click(formSignInButton);
     }
 
 }

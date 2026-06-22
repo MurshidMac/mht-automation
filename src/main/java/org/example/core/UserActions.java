@@ -7,6 +7,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
+
 /**
  * Small utility wrapper for common Selenium actions with waits.
  */
@@ -22,7 +24,9 @@ public class UserActions {
 
     // sometime wait until fail - keep it as second option
     public void click(By locator) {
-        driver.findElement(locator).click();
+        WebElement el = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+        el.click();
+        //driver.findElement(locator).click();
         //wait.until(ExpectedConditions.elementToBeClickable(locator)).click();
     }
 
@@ -47,4 +51,29 @@ public class UserActions {
     public void waitForPageTitle(String title) {
         wait.until(ExpectedConditions.titleContains(title));
     }
+
+    public WebElement waitForElement(By locator) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        return wait.until(ExpectedConditions.refreshed(
+                ExpectedConditions.visibilityOfElementLocated(locator)
+        ));
+    }
+
+    public WebElement findElementInIframes(By locator) {
+        driver.switchTo().defaultContent(); // reset first
+
+        int iframeCount = driver.findElements(By.tagName("iframe")).size();
+
+        for (int i = 0; i < iframeCount; i++) {
+            driver.switchTo().defaultContent();
+            driver.switchTo().frame(i);
+
+            if (!driver.findElements(locator).isEmpty()) {
+                return driver.findElement(locator);
+            }
+        }
+        driver.switchTo().defaultContent();
+        return null; // not found in any iframe
+    }
+
 }
