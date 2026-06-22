@@ -55,6 +55,31 @@
                     </includes>
                 </configuration>
             </plugin>
+
+            <!-- Cluecumber: rich Cucumber dashboard with charts, tag stats, feature breakdown -->
+            <plugin>
+                <groupId>com.trivago.rta</groupId>
+                <artifactId>cluecumber-report-plugin</artifactId>
+                <version>2.9.4</version>
+                <executions>
+                    <execution>
+                        <id>generate-cluecumber-report</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>reporting</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sourceJsonReportDirectory>${project.build.directory}/cucumber-reports</sourceJsonReportDirectory>
+                    <generatedHtmlReportDirectory>${project.build.directory}/cluecumber-report</generatedHtmlReportDirectory>
+                    <customPageTitle>MHT Automation — Cucumber Dashboard</customPageTitle>
+                    <startPage>ALL_SCENARIOS</startPage>
+                    <expandBeforeAfterHooks>true</expandBeforeAfterHooks>
+                    <expandStepHooks>true</expandStepHooks>
+                    <expandDocStrings>true</expandDocStrings>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
