@@ -7,6 +7,12 @@ on:
     branches: [ "main", "master" ]
   workflow_dispatch:   # allows manual trigger from GitHub UI
 
+# Needed for GitHub Pages deployment and writing job summaries
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -36,8 +42,11 @@ jobs:
           # Force headless mode so Chrome runs without a display in CI
           CHROME_HEADLESS: "true"
 
-      - name: Upload Extent Report
-        if: always()   # upload even when tests fail so you can see the failure report
+      # ── Reports ────────────────────────────────────────────────────────────
+
+      - name: Upload Extent Reports artifact
+        if: always()
+        id: upload-artifact
         uses: actions/upload-artifact@v4
         with:
           name: extent-report-${{ github.run_number }}
@@ -46,10 +55,42 @@ jobs:
             target/extent-reports/ExtentReport.pdf
           retention-days: 30
 
-      - name: Upload Cucumber HTML Report
+      - name: Upload Cucumber HTML Report artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: cucumber-report-${{ github.run_number }}
           path: target/cucumber-html-report.html
           retention-days: 30
+
+      # Deploy the HTML report to GitHub Pages (main/master branch only)
+      # After first run, the report is accessible at:
+      #   https://<org>.github.io/<repo>/
+      - name: Deploy HTML report to GitHub Pages
+        if: always() && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: target/extent-reports
+          publish_branch: gh-pages
+          destination_dir: reports/run-${{ github.run_number }}
+          keep_files: true   # preserve reports from previous runs
+
+      # Write a summary with direct links into the GitHub Actions run page
+      - name: Write job summary with report links
+        if: always()
+        run: |
+          REPO="${{ github.repository }}"
+          RUN_NUMBER="${{ github.run_number }}"
+          RUN_ID="${{ github.run_id }}"
+          PAGES_URL="https://$(echo $REPO | cut -d'/' -f1).github.io/$(echo $REPO | cut -d'/' -f2)/reports/run-${RUN_NUMBER}/ExtentReport.html"
+          ARTIFACT_URL="https://github.com/${REPO}/actions/runs/${RUN_ID}"
+
+          echo "## 📊 Test Report Links — Run #${RUN_NUMBER}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Report | Link |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|------|" >> $GITHUB_STEP_SUMMARY
+          echo "| 🌐 HTML Report (GitHub Pages) | [Open ExtentReport.html](${PAGES_URL}) |" >> $GITHUB_STEP_SUMMARY
+          echo "| 📦 PDF + HTML Download | [Download from Artifacts](${ARTIFACT_URL}) |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "> **Note:** The GitHub Pages link is live within ~30 seconds of deployment. The PDF is available in the artifact zip download." >> $GITHUB_STEP_SUMMARY
