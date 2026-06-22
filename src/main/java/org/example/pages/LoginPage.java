@@ -1,5 +1,6 @@
 package org.example.pages;
 
+import org.example.utils.ConfigReader;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -25,7 +26,7 @@ public class LoginPage extends BasePage{
     }
 
     public void openWebsite() {
-        driver.get("https://mot.almadinagroup.net/");
+        driver.get(ConfigReader.get("base.url"));
     }
 
     public void clickLoginButton() {

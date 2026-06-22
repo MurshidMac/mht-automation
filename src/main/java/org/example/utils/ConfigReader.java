@@ -1,5 +1,5 @@
 // src/test/java/org/example/utils/ConfigReader.java
-package utils;
+package org.example.utils;
 
 import java.io.FileInputStream;
 import java.io.IOException;

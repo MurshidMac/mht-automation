@@ -11,14 +11,13 @@ import org.openqa.selenium.chrome.ChromeOptions;
 public class DriverFactory {
 
     private static WebDriver driver;
-    // Update this path to your local chromedriver executable
-    private static final String CHROME_DRIVER_PATH = "C:\\drivers\\chromedriver-win64\\chromedriver.exe";
 
     private DriverFactory() {}
 
     public static WebDriver getDriver() {
         if (driver == null) {
-            System.setProperty("webdriver.chrome.driver", CHROME_DRIVER_PATH);
+            // Selenium Manager (built into Selenium 4.6+) automatically downloads
+            // the correct chromedriver if it is not present on PATH — no manual setup needed.
             ChromeOptions options = new ChromeOptions();
             // add options as needed, e.g. headless, disable-gpu, etc.
             driver = new ChromeDriver(options);

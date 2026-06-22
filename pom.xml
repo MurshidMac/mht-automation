@@ -27,6 +27,20 @@
             <version>7.15.0</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- Extent Reports: rich HTML report with step-level details and failure info -->
+        <dependency>
+            <groupId>com.aventstack</groupId>
+            <artifactId>extentreports</artifactId>
+            <version>5.1.2</version>
+        </dependency>
+
+        <!-- Extent Reports Cucumber 7 adapter -->
+        <dependency>
+            <groupId>tech.grasshopper</groupId>
+            <artifactId>extentreports-cucumber7-adapter</artifactId>
+            <version>1.14.0</version>
+        </dependency>
     </dependencies>
 
     <build>
