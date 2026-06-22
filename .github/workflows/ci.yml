@@ -7,9 +7,8 @@ on:
     branches: [ "main", "master" ]
   workflow_dispatch:   # allows manual trigger from GitHub UI
 
-# Needed for GitHub Pages deployment and writing job summaries
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -28,8 +27,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      # Chrome + ChromeDriver are pre-installed on ubuntu-latest.
-      # Selenium Manager will handle version matching automatically.
       - name: Verify Chrome installation
         run: google-chrome --version
 
@@ -39,14 +36,12 @@ jobs:
       - name: Run tests (headless Chrome)
         run: mvn test -B
         env:
-          # Force headless mode so Chrome runs without a display in CI
           CHROME_HEADLESS: "true"
 
-      # ── Reports ────────────────────────────────────────────────────────────
+      # ── Artifacts ──────────────────────────────────────────────────────────
 
-      - name: Upload Extent Reports artifact
+      - name: Upload Extent Reports artifact (HTML + PDF)
         if: always()
-        id: upload-artifact
         uses: actions/upload-artifact@v4
         with:
           name: extent-report-${{ github.run_number }}
@@ -63,27 +58,22 @@ jobs:
           path: target/cucumber-html-report.html
           retention-days: 30
 
-      # Deploy the HTML report to GitHub Pages (main/master branch only)
-      # After first run, the report is accessible at:
-      #   https://<org>.github.io/<repo>/
-      - name: Deploy HTML report to GitHub Pages
+      # ── GitHub Pages deployment ────────────────────────────────────────────
+      # Only deploy on pushes to main/master, not on PRs
+      - name: Upload Pages content
         if: always() && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
-        uses: peaceiris/actions-gh-pages@v4
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: target/extent-reports
-          publish_branch: gh-pages
-          destination_dir: reports/run-${{ github.run_number }}
-          keep_files: true   # preserve reports from previous runs
+          path: target/extent-reports   # deploys the whole folder as the Pages root
 
-      # Write a summary with direct links into the GitHub Actions run page
-      - name: Write job summary with report links
+      # ── Job summary with links ─────────────────────────────────────────────
+      - name: Write job summary
         if: always()
         run: |
           REPO="${{ github.repository }}"
           RUN_NUMBER="${{ github.run_number }}"
           RUN_ID="${{ github.run_id }}"
-          PAGES_URL="https://$(echo $REPO | cut -d'/' -f1).github.io/$(echo $REPO | cut -d'/' -f2)/reports/run-${RUN_NUMBER}/ExtentReport.html"
+          PAGES_URL="https://$(echo $REPO | cut -d'/' -f1).github.io/$(echo $REPO | cut -d'/' -f2)/ExtentReport.html"
           ARTIFACT_URL="https://github.com/${REPO}/actions/runs/${RUN_ID}"
 
           echo "## 📊 Test Report Links — Run #${RUN_NUMBER}" >> $GITHUB_STEP_SUMMARY
@@ -93,4 +83,19 @@ jobs:
           echo "| 🌐 HTML Report (GitHub Pages) | [Open ExtentReport.html](${PAGES_URL}) |" >> $GITHUB_STEP_SUMMARY
           echo "| 📦 PDF + HTML Download | [Download from Artifacts](${ARTIFACT_URL}) |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "> **Note:** The GitHub Pages link is live within ~30 seconds of deployment. The PDF is available in the artifact zip download." >> $GITHUB_STEP_SUMMARY
+          echo "> The Pages link shows the **latest run** only. All runs are available as downloadable artifacts." >> $GITHUB_STEP_SUMMARY
+
+  # Separate job required by the official GitHub Pages deploy flow
+  deploy-pages:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: always() && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
